@@ -8,6 +8,7 @@ const Calendar = {
         // Initialize the calendar with current date
         this.date = new Date();
         this.updateDateDisplay();
+        this.render();
     },
     
     render: function() {
@@ -67,3 +68,63 @@ const Calendar = {
                 this.date.setDate(this.date.getDate() - 7);
                 break;
             case 'day':
+                this.date.setDate(this.date.getDate() - 1);
+                break;
+        }
+        this.render();
+    },
+
+    navigateNext: function() {
+        // Navigate to next month/week/day
+        switch (this.currentView) {
+            case 'month':
+                this.date.setMonth(this.date.getMonth() + 1);
+                break;
+            case 'week':
+                this.date.setDate(this.date.getDate() + 7);
+                break;
+            case 'day':
+                this.date.setDate(this.date.getDate() + 1);
+                break;
+        }
+        this.render();
+    },
+
+    changeView: function(view) {
+        this.currentView = view;
+        this.render();
+    },
+
+    getWeekStart: function(date) {
+        // Get the start of the current week (Sunday)
+        const tempDate = new Date(date);
+        const dayOfWeek = tempDate.getDay();
+        tempDate.setDate(tempDate.getDate() - dayOfWeek);
+        return tempDate;
+    },
+
+    renderMonthView: function() {
+        console.log("Rendering month view...");
+        // TODO: Implement actual rendering logic
+    },
+
+    renderWeekView: function() {
+        console.log("Rendering week view...");
+        // TODO: Implement actual rendering logic
+    },
+
+    renderDayView: function() {
+        console.log("Rendering day view...");
+        // TODO: Implement actual rendering logic
+    },
+
+    renderUpcomingEvents: function() {
+        console.log("Updating upcoming events...");
+        // TODO: Implement event fetching and display logic
+    }
+};
+
+// Initialize the calendar when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+    Calendar.init();
+});
