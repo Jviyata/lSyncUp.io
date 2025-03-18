@@ -1,0 +1,238 @@
+/* Calendar.css - Calendar-specific styles */
+
+/* Calendar container */
+.calendar-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: #f9f9f9;
+}
+
+.calendar-view {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Month view */
+.month-view {
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: 500;
+    color: #70757a;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    height: calc(100vh - 230px);
+}
+
+.day-cell {
+    border-right: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.day-cell:nth-child(7n) {
+    border-right: none;
+}
+
+.day-cell:nth-child(n+36) {
+    border-bottom: none;
+}
+
+.day-number {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #70757a;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.day-cell.today .day-number {
+    background-color: #1a73e8;
+    color: white;
+    font-weight: bold;
+}
+
+.day-cell.other-month {
+    background-color: #f8f9fa;
+}
+
+.day-cell.other-month .day-number {
+    opacity: 0.5;
+}
+
+/* Events in calendar */
+.day-events {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.event-item {
+    font-size: 12px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.event-item.personal {
+    background-color: rgba(66, 133, 244, 0.2);
+    border-left: 3px solid #4285f4;
+}
+
+.event-item.work {
+    background-color: rgba(15, 157, 88, 0.2);
+    border-left: 3px solid #0f9d58;
+}
+
+.event-item.family {
+    background-color: rgba(244, 180, 0, 0.2);
+    border-left: 3px solid #f4b400;
+}
+
+.more-events {
+    font-size: 11px;
+    color: #70757a;
+    cursor: pointer;
+    margin-top: 2px;
+}
+
+.more-events:hover {
+    text-decoration: underline;
+}
+
+/* Week view */
+.week-view {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 180px);
+}
+
+.week-header {
+    display: grid;
+    grid-template-columns: 50px repeat(7, 1fr);
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.week-header .day-column {
+    padding: 10px;
+}
+
+.week-header .day-name {
+    font-weight: 500;
+    color: #70757a;
+}
+
+.week-header .day-date {
+    font-size: 1.5rem;
+    margin-top: 5px;
+}
+
+.week-header .today .day-date {
+    background-color: #1a73e8;
+    color: white;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px auto 0;
+}
+
+.week-body {
+    display: grid;
+    grid-template-columns: 50px repeat(7, 1fr);
+    height: 100%;
+    overflow-y: auto;
+}
+
+.time-column {
+    border-right: 1px solid #e0e0e0;
+}
+
+.time-slot {
+    height: 50px;
+    text-align: right;
+    padding-right: 8px;
+    font-size: 10px;
+    color: #70757a;
+    position: relative;
+    top: -6px;
+}
+
+.day-column {
+    border-right: 1px solid #e0e0e0;
+    position: relative;
+}
+
+.day-column:last-child {
+    border-right: none;
+}
+
+.hour-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #e0e0e0;
+}
+
+/* Day view */
+.day-view {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    height: calc(100vh - 180px);
+    overflow-y: auto;
+}
+
+.day-view .time-column {
+    border-right: 1px solid #e0e0e0;
+}
+
+.day-view .events-column {
+    position: relative;
+}
+
+/* Current time indicator */
+.current-time {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #ea4335;
+    z-index: 2;
+}
+
+.current-time::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: -4px;
+    width: 10px;
+    height: 10px;
+    background-color: #ea4335;
+    border-radius: 50%;
+}
