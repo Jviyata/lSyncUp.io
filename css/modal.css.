@@ -1,59 +1,60 @@
-/* Modal.css - Styles for modal dialogs */
+/* modal.css - Styles for modal dialogs */
 
 .modal {
     display: none;
     position: fixed;
-    top: 0;
+    z-index: 1000;
     left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal.show {
-    display: flex;
+    overflow: auto;
 }
 
 .modal-content {
-    background-color: white;
-    width: 500px;
-    max-width: 90%;
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slide-down 0.3s ease-out;
 }
 
-.modal-header {
-    padding: 1rem;
-    border-bottom: 1px solid #e0e0e0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+@keyframes slide-down {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
-.modal-header h3 {
-    font-weight: 500;
-    color: #202124;
-}
-
-.close-btn {
-    background: none;
-    border: none;
+.close-modal {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
     font-size: 1.5rem;
     cursor: pointer;
-    color: #5f6368;
+    color: var(--dark-gray);
 }
 
-.modal-body {
-    padding: 1rem;
+.close-modal:hover {
+    color: var(--text-color);
 }
 
-/* Form styles */
+.modal h2 {
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .form-row {
@@ -68,45 +69,68 @@
 label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #5f6368;
-    font-size: 0.875rem;
+    font-weight: 500;
 }
 
 input[type="text"],
+input[type="email"],
 input[type="date"],
 input[type="time"],
 select,
 textarea {
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #dadce0;
+    padding: 0.75rem;
+    border: 1px solid var(--mid-gray);
     border-radius: 4px;
+    font-size: 1rem;
     font-family: inherit;
-    font-size: 0.875rem;
 }
 
-input[type="text"]:focus,
-input[type="date"]:focus,
-input[type="time"]:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: #1a73e8;
-}
-
-.sharing-options {
-    margin-top: 0.5rem;
+textarea {
+    resize: vertical;
+    min-height: 100px;
 }
 
 .form-actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
+    justify-content: space-between;
+    margin-top: 2rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 576px) {
+.friends-list {
+    margin-bottom: 1rem;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid var(--mid-gray);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.friend-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.friend-item:last-child {
+    border-bottom: none;
+}
+
+.remove-friend {
+    cursor: pointer;
+    color: var(--danger-color);
+}
+
+/* Responsive for modals */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+        margin: 5% auto;
+    }
+    
     .form-row {
         flex-direction: column;
         gap: 0;
