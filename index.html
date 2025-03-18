@@ -7,148 +7,170 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/calendar.css">
     <link rel="stylesheet" href="css/modal.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="js/app.js" defer></script>
+    <script src="js/calendar.js" defer></script>
+    <script src="js/events.js" defer></script>
+    <script src="js/storage.js" defer></script>
+    <script src="js/ui.js" defer></script>
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="logo">
-                <h1>Social Calendar</h1>
-            </div>
+        <header>
+            <h1>Social Calendar</h1>
             <div class="user-controls">
-                <button id="add-event-btn" class="btn primary">
-                    <i class="fas fa-plus"></i> New Event
-                </button>
-                <div class="view-selector">
-                    <button data-view="month" class="view-btn active">Month</button>
-                    <button data-view="week" class="view-btn">Week</button>
-                    <button data-view="day" class="view-btn">Day</button>
-                </div>
+                <span id="current-user">Guest</span>
+                <button id="login-btn">Login</button>
             </div>
         </header>
-
-        <!-- Main Content -->
-        <main class="app-content">
-            <!-- Calendar Navigation -->
-            <div class="calendar-nav">
-                <button id="prev-btn" class="nav-btn">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <h2 id="current-date-range">March 2025</h2>
-                <button id="today-btn" class="nav-btn today">Today</button>
-                <button id="next-btn" class="nav-btn">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
+        
+        <div class="calendar-controls">
+            <div class="date-navigation">
+                <button id="prev-btn">&lt;</button>
+                <h2 id="current-date">March 2025</h2>
+                <button id="next-btn">&gt;</button>
             </div>
-
-            <!-- Calendar Container -->
-            <div class="calendar-container">
-                <div id="calendar-view" class="calendar-view month-view">
-                    <!-- Calendar will be generated here by JavaScript -->
+            <div class="view-controls">
+                <button id="month-view" class="view-btn active">Month</button>
+                <button id="week-view" class="view-btn">Week</button>
+                <button id="day-view" class="view-btn">Day</button>
+            </div>
+            <button id="add-event-btn" class="primary-btn">+ Add Event</button>
+        </div>
+        
+        <div class="calendar-container">
+            <div id="month-view-container" class="calendar-view active">
+                <div class="weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
                 </div>
+                <div id="calendar-grid" class="calendar-grid"></div>
             </div>
-        </main>
-
-        <!-- Sidebar -->
-        <aside class="app-sidebar">
-            <div class="sidebar-section">
-                <h3>My Calendars</h3>
-                <ul class="calendar-list">
-                    <li>
-                        <label>
-                            <input type="checkbox" checked data-calendar="personal">
-                            <span class="color-indicator" style="background-color: #4285f4;"></span>
-                            Personal
-                        </label>
-                    </li>
-                    <li>
-                        <label>
-                            <input type="checkbox" checked data-calendar="work">
-                            <span class="color-indicator" style="background-color: #0f9d58;"></span>
-                            Work
-                        </label>
-                    </li>
-                    <li>
-                        <label>
-                            <input type="checkbox" checked data-calendar="family">
-                            <span class="color-indicator" style="background-color: #f4b400;"></span>
-                            Family
-                        </label>
-                    </li>
-                </ul>
+            
+            <div id="week-view-container" class="calendar-view">
+                <div class="weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div id="week-grid" class="week-grid"></div>
             </div>
-            <div class="sidebar-section">
+            
+            <div id="day-view-container" class="calendar-view">
+                <div id="day-header" class="day-header">Monday, March 17</div>
+                <div id="day-grid" class="day-grid"></div>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="upcoming-events">
                 <h3>Upcoming Events</h3>
-                <ul id="upcoming-events" class="event-list">
-                    <!-- Upcoming events will be generated here by JavaScript -->
-                </ul>
+                <ul id="upcoming-events-list"></ul>
             </div>
-        </aside>
-    </div>
-
-    <!-- Event Modal -->
-    <div id="event-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-title">Add New Event</h3>
-                <button id="close-modal" class="close-btn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="event-form">
-                    <div class="form-group">
-                        <label for="event-title">Event Title</label>
-                        <input type="text" id="event-title" name="title" required>
+            <div class="categories">
+                <h3>Categories</h3>
+                <div id="category-filters">
+                    <div class="category-item">
+                        <input type="checkbox" id="cat-personal" checked>
+                        <label for="cat-personal" class="category personal">Personal</label>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="event-date">Date</label>
-                            <input type="date" id="event-date" name="date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="event-time">Time</label>
-                            <input type="time" id="event-time" name="time">
-                        </div>
+                    <div class="category-item">
+                        <input type="checkbox" id="cat-work" checked>
+                        <label for="cat-work" class="category work">Work</label>
                     </div>
-                    <div class="form-group">
-                        <label for="event-calendar">Calendar</label>
-                        <select id="event-calendar" name="calendar">
-                            <option value="personal">Personal</option>
-                            <option value="work">Work</option>
-                            <option value="family">Family</option>
-                        </select>
+                    <div class="category-item">
+                        <input type="checkbox" id="cat-social" checked>
+                        <label for="cat-social" class="category social">Social</label>
                     </div>
-                    <div class="form-group">
-                        <label for="event-description">Description</label>
-                        <textarea id="event-description" name="description" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Sharing</label>
-                        <div class="sharing-options">
-                            <label>
-                                <input type="checkbox" id="event-public" name="public">
-                                Make this event public
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group sharing-with" style="display: none;">
-                        <label for="share-with">Share with (email addresses)</label>
-                        <input type="text" id="share-with" name="shareWith" placeholder="user@example.com, user2@example.com">
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" id="delete-event" class="btn danger" style="display: none;">Delete</button>
-                        <button type="submit" id="save-event" class="btn primary">Save Event</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="js/storage.js"></script>
-    <script src="js/calendar.js"></script>
-    <script src="js/events.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/app.js"></script>
+    
+    <!-- Modal for adding/editing events -->
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modal-title">Add Event</h2>
+            <form id="event-form">
+                <div class="form-group">
+                    <label for="event-title">Title</label>
+                    <input type="text" id="event-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-date">Date</label>
+                    <input type="date" id="event-date" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-start">Start Time</label>
+                        <input type="time" id="event-start" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-end">End Time</label>
+                        <input type="time" id="event-end" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="event-category">Category</label>
+                    <select id="event-category">
+                        <option value="personal">Personal</option>
+                        <option value="work">Work</option>
+                        <option value="social">Social</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event-description">Description</label>
+                    <textarea id="event-description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="event-location">Location</label>
+                    <input type="text" id="event-location">
+                </div>
+                <div class="form-group">
+                    <label>Invite Friends</label>
+                    <div id="friends-list" class="friends-list">
+                        <!-- Friend selection will be populated by JavaScript -->
+                    </div>
+                    <button type="button" id="add-friend-btn" class="secondary-btn">Add Friend</button>
+                </div>
+                <div class="form-group">
+                    <label for="event-reminder">Reminder</label>
+                    <select id="event-reminder">
+                        <option value="none">None</option>
+                        <option value="15">15 minutes before</option>
+                        <option value="30">30 minutes before</option>
+                        <option value="60">1 hour before</option>
+                        <option value="1440">1 day before</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="delete-event-btn" class="danger-btn" hidden>Delete</button>
+                    <button type="submit" id="save-event-btn" class="primary-btn">Save Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Friend invitation modal -->
+    <div id="friend-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add Friend</h2>
+            <div class="form-group">
+                <label for="friend-email">Email</label>
+                <input type="email" id="friend-email" required>
+            </div>
+            <button id="confirm-add-friend" class="primary-btn">Add</button>
+        </div>
+    </div>
 </body>
 </html>
