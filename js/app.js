@@ -1,10 +1,5 @@
 // app.js - Application initialization
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize the application
-    App.init();
-});
-
 const App = {
     init: function() {
         // Initialize all components
@@ -22,23 +17,29 @@ const App = {
     
     setupEventListeners: function() {
         // View switching
-        document.getElementById('month-view').addEventListener('click', () => UI.switchView('month'));
-        document.getElementById('week-view').addEventListener('click', () => UI.switchView('week'));
-        document.getElementById('day-view').addEventListener('click', () => UI.switchView('day'));
+        document.getElementById('month-view')?.addEventListener('click', () => UI.switchView('month'));
+        document.getElementById('week-view')?.addEventListener('click', () => UI.switchView('week'));
+        document.getElementById('day-view')?.addEventListener('click', () => UI.switchView('day'));
         
         // Date navigation
-        document.getElementById('prev-btn').addEventListener('click', () => Calendar.navigatePrevious());
-        document.getElementById('next-btn').addEventListener('click', () => Calendar.navigateNext());
+        document.getElementById('prev-btn')?.addEventListener('click', () => Calendar.navigatePrevious());
+        document.getElementById('next-btn')?.addEventListener('click', () => Calendar.navigateNext());
         
         // Add event button
-        document.getElementById('add-event-btn').addEventListener('click', () => Events.openEventModal());
+        document.getElementById('add-event-btn')?.addEventListener('click', () => Events.openEventModal());
         
         // Login button
-        document.getElementById('login-btn').addEventListener('click', () => this.toggleLogin());
+        document.getElementById('login-btn')?.addEventListener('click', this.toggleLogin.bind(this));
         
         // Category filters
         document.querySelectorAll('#category-filters input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', () => Calendar.applyFilters());
+            checkbox.addEventListener('change', () => {
+                if (typeof Calendar.applyFilters === "function") {
+                    Calendar.applyFilters();
+                } else {
+                    console.warn("Calendar.applyFilters() is not implemented yet.");
+                }
+            });
         });
     },
     
@@ -46,8 +47,8 @@ const App = {
         // Load user data
         const user = Storage.getUser();
         if (user) {
-            document.getElementById('current-user').textContent = user.name;
-            document.getElementById('login-btn').textContent = 'Logout';
+            document.getElementById('current-user')?.textContent = user.name;
+            document.getElementById('login-btn')?.textContent = 'Logout';
         }
         
         // Load events
@@ -74,8 +75,8 @@ const App = {
         if (currentUser) {
             // Log out
             Storage.setUser(null);
-            document.getElementById('current-user').textContent = 'Guest';
-            document.getElementById('login-btn').textContent = 'Login';
+            document.getElementById('current-user')?.textContent = 'Guest';
+            document.getElementById('login-btn')?.textContent = 'Login';
         } else {
             // Log in (simplified for demo)
             const user = {
@@ -84,8 +85,8 @@ const App = {
                 email: 'john@example.com'
             };
             Storage.setUser(user);
-            document.getElementById('current-user').textContent = user.name;
-            document.getElementById('login-btn').textContent = 'Logout';
+            document.getElementById('current-user')?.textContent = user.name;
+            document.getElementById('login-btn')?.textContent = 'Logout';
         }
     },
     
@@ -161,3 +162,8 @@ const App = {
         friends.forEach(friend => Storage.addFriend(friend));
     }
 };
+
+// Ensure App initializes after everything is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    App.init();
+});
