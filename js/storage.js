@@ -1,130 +1,120 @@
-/**
- * Storage.js - Handles data storage and retrieval
- * Uses browser's localStorage for persistence
- */
+// storage.js - Local storage interface
 
-const Storage = (function() {
-    // Default events for demo purposes
-    const defaultEvents = [
-        {
-            id: '1',
-            title: 'Team Meeting',
-            date: '2025-03-18',
-            time: '10:00',
-            calendar: 'work',
-            description: 'Weekly team sync meeting',
-            public: true,
-            shareWith: []
-        },
-        {
-            id: '2',
-            title: 'Lunch with Sarah',
-            date: '2025-03-20',
-            time: '12:30',
-            calendar: 'personal',
-            description: 'Lunch at Italian restaurant',
-            public: false,
-            shareWith: ['sarah@example.com']
-        },
-        {
-            id: '3',
-            title: 'Family Dinner',
-            date: '2025-03-21',
-            time: '18:00',
-            calendar: 'family',
-            description: 'Dinner at mom\'s house',
-            public: false,
-            shareWith: []
+const Storage = {
+    keys: {
+        events: 'social-calendar-events',
+        user: 'social-calendar-user',
+        friends: 'social-calendar-friends'
+    },
+    
+    init: function() {
+        // Initialize storage if needed
+        if (!localStorage.getItem(this.keys.events)) {
+            localStorage.setItem(this.keys.events, JSON.stringify([]));
         }
-    ];
-
-    // Initialize storage with default events if empty
-    function init() {
-        if (!localStorage.getItem('events')) {
-            localStorage.setItem('events', JSON.stringify(defaultEvents));
+        
+        if (!localStorage.getItem(this.keys.friends)) {
+            localStorage.setItem(this.keys.friends, JSON.stringify([]));
         }
-    }
-
-    // Get all events
-    function getEvents() {
-        return JSON.parse(localStorage.getItem('events')) || [];
-    }
-
-    // Get a specific event by ID
-    function getEvent(id) {
-        const events = getEvents();
+    },
+    
+    // Event methods
+    getEvents: function() {
+        return JSON.parse(localStorage.getItem(this.keys.events)) || [];
+    },
+    
+    getEventById: function(id) {
+        const events = this.getEvents();
         return events.find(event => event.id === id);
-    }
-
-    // Save a new event
-    function saveEvent(event) {
-        const events = getEvents();
-        
-        // Generate a new ID if this is a new event
-        if (!event.id) {
-            event.id = Date.now().toString();
-        } else {
-            // Remove the existing event if we're updating
-            const index = events.findIndex(e => e.id === event.id);
-            if (index !== -1) {
-                events.splice(index, 1);
-            }
-        }
-        
+    },
+    
+    addEvent: function(event) {
+        const events = this.getEvents();
         events.push(event);
-        localStorage.setItem('events', JSON.stringify(events));
-        return event;
-    }
-
-    // Delete an event
-    function deleteEvent(id) {
-        const events = getEvents();
-        const newEvents = events.filter(event => event.id !== id);
-        localStorage.setItem('events', JSON.stringify(newEvents));
-    }
-
-    // Get events for a specific date
-    function getEventsByDate(date) {
-        const events = getEvents();
-        return events.filter(event => event.date === date);
-    }
-
-    // Get events for a date range
-    function getEventsByDateRange(startDate, endDate) {
-        const events = getEvents();
-        return events.filter(event => {
-            return event.date >= startDate && event.date <= endDate;
-        });
-    }
-
-    // Get upcoming events
-    function getUpcomingEvents(limit = 5) {
-        const events = getEvents();
-        const today = new Date().toISOString().split('T')[0];
+        localStorage.setItem(this.keys.events, JSON.stringify(events));
+    },
+    
+    updateEvent: function(updatedEvent) {
+        const events = this.getEvents();
+        const index = events.findIndex(event => event.id === updatedEvent.id);
         
-        return events
-            .filter(event => event.date >= today)
-            .sort((a, b) => {
-                if (a.date !== b.date) {
-                    return a.date.localeCompare(b.date);
-                }
-                return a.time.localeCompare(b.time);
-            })
-            .slice(0, limit);
+        if (index !== -1) {
+            events[index] = updatedEvent;
+            localStorage.setItem(this.keys.events, JSON.stringify(events));
+        }
+    },
+    
+    deleteEvent: function(id) {
+        const events = this.getEvents();
+        const filteredEvents = events.filter(event => event.id !== id);
+        localStorage.setItem(this.keys.events, JSON.stringify(filteredEvents));
+    },
+    
+    // Filter events by date range
+    getEventsByDateRange: function(startDate, endDate) {
+        const events = this.getEvents();
+        return events.filter(event => {
+            const eventDate = new Date(event.date);
+            return eventDate >= startDate && eventDate <= endDate;
+        });
+    },
+    
+    // Filter events by category
+    getEventsByCategory: function(category) {
+        const events = this.getEvents();
+        return events.filter(event => event.category === category);
+    },
+    
+    // User methods
+    getUser: function() {
+        return JSON.parse(localStorage.getItem(this.keys.user));
+    },
+    
+    setUser: function(user) {
+        if (user) {
+            localStorage.setItem(this.keys.user, JSON.stringify(user));
+        } else {
+            localStorage.removeItem(this.keys.user);
+        }
+    },
+    
+    // Friend methods
+    getFriends: function() {
+        return JSON.parse(localStorage.getItem(this.keys.friends)) || [];
+    },
+    
+    getFriendById: function(id) {
+        const friends = this.getFriends();
+        return friends.find(friend => friend.id === id);
+    },
+    
+    addFriend: function(friend) {
+        const friends = this.getFriends();
+        friends.push(friend);
+        localStorage.setItem(this.keys.friends, JSON.stringify(friends));
+    },
+    
+    updateFriend: function(updatedFriend) {
+        const friends = this.getFriends();
+        const index = friends.findIndex(friend => friend.id === updatedFriend.id);
+        
+        if (index !== -1) {
+            friends[index] = updatedFriend;
+            localStorage.setItem(this.keys.friends, JSON.stringify(friends));
+        }
+    },
+    
+    deleteFriend: function(id) {
+        const friends = this.getFriends();
+        const filteredFriends = friends.filter(friend => friend.id !== id);
+        localStorage.setItem(this.keys.friends, JSON.stringify(filteredFriends));
+    },
+    
+    // Clear all data
+    clearAll: function() {
+        localStorage.removeItem(this.keys.events);
+        localStorage.removeItem(this.keys.user);
+        localStorage.removeItem(this.keys.friends);
+        this.init();
     }
-
-    // Public API
-    return {
-        init,
-        getEvents,
-        getEvent,
-        saveEvent,
-        deleteEvent,
-        getEventsByDate,
-        getEventsByDateRange,
-        getUpcomingEvents
-    };
-})();
-
-// Initialize storage when the script loads
-Storage.init();
+};
