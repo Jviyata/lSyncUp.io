@@ -1,130 +1,148 @@
-// calendar.js - Calendar functionality
+// Initialize calendar data
+let currentDate = new Date();
+let selectedView = 'month'; // default view
+let events = []; // Will hold events for the calendar
 
-const Calendar = {
-    date: new Date(),
-    currentView: 'month',
-    
-    init: function() {
-        // Initialize the calendar with current date
-        this.date = new Date();
-        this.updateDateDisplay();
-        this.render();
-    },
-    
-    render: function() {
-        // Render the calendar based on current view
-        this.updateDateDisplay();
-        
-        switch (this.currentView) {
-            case 'month':
-                this.renderMonthView();
-                break;
-            case 'week':
-                this.renderWeekView();
-                break;
-            case 'day':
-                this.renderDayView();
-                break;
-        }
-        
-        // Update upcoming events in sidebar
-        this.renderUpcomingEvents();
-    },
-    
-    updateDateDisplay: function() {
-        // Update the date display in the header
-        const dateElement = document.getElementById('current-date');
-        
-        switch (this.currentView) {
-            case 'month':
-                dateElement.textContent = this.date.toLocaleString('default', { month: 'long', year: 'numeric' });
-                break;
-            case 'week':
-                const weekStart = this.getWeekStart(this.date);
-                const weekEnd = new Date(weekStart);
-                weekEnd.setDate(weekEnd.getDate() + 6);
-                
-                if (weekStart.getMonth() === weekEnd.getMonth()) {
-                    dateElement.textContent = `${weekStart.toLocaleString('default', { month: 'long' })} ${weekStart.getDate()} - ${weekEnd.getDate()}, ${weekStart.getFullYear()}`;
-                } else if (weekStart.getFullYear() === weekEnd.getFullYear()) {
-                    dateElement.textContent = `${weekStart.toLocaleString('default', { month: 'short' })} ${weekStart.getDate()} - ${weekEnd.toLocaleString('default', { month: 'short' })} ${weekEnd.getDate()}, ${weekStart.getFullYear()}`;
-                } else {
-                    dateElement.textContent = `${weekStart.toLocaleString('default', { month: 'short' })} ${weekStart.getDate()}, ${weekStart.getFullYear()} - ${weekEnd.toLocaleString('default', { month: 'short' })} ${weekEnd.getDate()}, ${weekEnd.getFullYear()}`;
-                }
-                break;
-            case 'day':
-                dateElement.textContent = this.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-                break;
-        }
-    },
-    
-    navigatePrevious: function() {
-        // Navigate to previous month/week/day
-        switch (this.currentView) {
-            case 'month':
-                this.date.setMonth(this.date.getMonth() - 1);
-                break;
-            case 'week':
-                this.date.setDate(this.date.getDate() - 7);
-                break;
-            case 'day':
-                this.date.setDate(this.date.getDate() - 1);
-                break;
-        }
-        this.render();
-    },
+// Get DOM elements
+const currentDateElement = document.getElementById('current-date');
+const calendarGrid = document.getElementById('calendar-grid');
+const weekGrid = document.getElementById('week-grid');
+const dayGrid = document.getElementById('day-grid');
+const monthViewBtn = document.getElementById('month-view');
+const weekViewBtn = document.getElementById('week-view');
+const dayViewBtn = document.getElementById('day-view');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const addEventBtn = document.getElementById('add-event-btn');
 
-    navigateNext: function() {
-        // Navigate to next month/week/day
-        switch (this.currentView) {
-            case 'month':
-                this.date.setMonth(this.date.getMonth() + 1);
-                break;
-            case 'week':
-                this.date.setDate(this.date.getDate() + 7);
-                break;
-            case 'day':
-                this.date.setDate(this.date.getDate() + 1);
-                break;
-        }
-        this.render();
-    },
+// Event listener for view buttons
+monthViewBtn.addEventListener('click', () => changeView('month'));
+weekViewBtn.addEventListener('click', () => changeView('week'));
+dayViewBtn.addEventListener('click', () => changeView('day'));
 
-    changeView: function(view) {
-        this.currentView = view;
-        this.render();
-    },
+// Event listener for navigation buttons
+prevBtn.addEventListener('click', () => changeMonth(-1));
+nextBtn.addEventListener('click', () => changeMonth(1));
 
-    getWeekStart: function(date) {
-        // Get the start of the current week (Sunday)
-        const tempDate = new Date(date);
-        const dayOfWeek = tempDate.getDay();
-        tempDate.setDate(tempDate.getDate() - dayOfWeek);
-        return tempDate;
-    },
+// Change the current view (month, week, day)
+function changeView(view) {
+    selectedView = view;
+    updateCalendarView();
+}
 
-    renderMonthView: function() {
-        console.log("Rendering month view...");
-        // TODO: Implement actual rendering logic
-    },
-
-    renderWeekView: function() {
-        console.log("Rendering week view...");
-        // TODO: Implement actual rendering logic
-    },
-
-    renderDayView: function() {
-        console.log("Rendering day view...");
-        // TODO: Implement actual rendering logic
-    },
-
-    renderUpcomingEvents: function() {
-        console.log("Updating upcoming events...");
-        // TODO: Implement event fetching and display logic
+// Update calendar view based on the selected view
+function updateCalendarView() {
+    switch (selectedView) {
+        case 'month':
+            showMonthView();
+            break;
+        case 'week':
+            showWeekView();
+            break;
+        case 'day':
+            showDayView();
+            break;
     }
-};
+}
 
-// Initialize the calendar when the page loads
-document.addEventListener("DOMContentLoaded", () => {
-    Calendar.init();
+// Display the calendar in month view
+function showMonthView() {
+    const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    const daysInMonth = monthEnd.getDate();
+    
+    currentDateElement.textContent = monthStart.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+    // Clear the grid before filling
+    calendarGrid.innerHTML = '';
+    
+    // Generate calendar grid for the month
+    let firstDay = monthStart.getDay(); // Start of the month
+    for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement('div');
+        calendarGrid.appendChild(emptyCell);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.classList.add('calendar-day');
+        dayCell.textContent = day;
+        dayCell.addEventListener('click', () => openDayView(day));
+        calendarGrid.appendChild(dayCell);
+    }
+
+    // Show the month view and hide other views
+    document.getElementById('month-view-container').classList.add('active');
+    document.getElementById('week-view-container').classList.remove('active');
+    document.getElementById('day-view-container').classList.remove('active');
+}
+
+// Display the calendar in week view
+function showWeekView() {
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Go back to Sunday
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // End of the week (Saturday)
+
+    currentDateElement.textContent = `${startOfWeek.toLocaleString('default', { weekday: 'long' })}, ${startOfWeek.getMonth() + 1}/${startOfWeek.getDate()} - ${endOfWeek.toLocaleString('default', { weekday: 'long' })}, ${endOfWeek.getMonth() + 1}/${endOfWeek.getDate()}`;
+
+    // Clear the week grid
+    weekGrid.innerHTML = '';
+
+    // Generate the week grid
+    for (let i = 0; i < 7; i++) {
+        const day = new Date(startOfWeek);
+        day.setDate(startOfWeek.getDate() + i);
+        const dayCell = document.createElement('div');
+        dayCell.classList.add('week-day');
+        dayCell.textContent = `${day.getDate()} ${day.toLocaleString('default', { weekday: 'short' })}`;
+        weekGrid.appendChild(dayCell);
+    }
+
+    // Show the week view and hide other views
+    document.getElementById('week-view-container').classList.add('active');
+    document.getElementById('month-view-container').classList.remove('active');
+    document.getElementById('day-view-container').classList.remove('active');
+}
+
+// Display the calendar in day view
+function showDayView() {
+    const currentDayString = currentDate.toLocaleDateString();
+    currentDateElement.textContent = currentDayString;
+
+    // Clear the day grid
+    dayGrid.innerHTML = '';
+
+    // Create grid for the day's events
+    const eventsForDay = events.filter(event => event.date === currentDayString);
+
+    eventsForDay.forEach(event => {
+        const eventCell = document.createElement('div');
+        eventCell.classList.add('day-event');
+        eventCell.textContent = event.title;
+        dayGrid.appendChild(eventCell);
+    });
+
+    // Show the day view and hide other views
+    document.getElementById('day-view-container').classList.add('active');
+    document.getElementById('month-view-container').classList.remove('active');
+    document.getElementById('week-view-container').classList.remove('active');
+}
+
+// Handle the 'add event' button click
+addEventBtn.addEventListener('click', () => {
+    // This would open a modal to add an event. For now, we'll log to the console.
+    alert('Add event clicked');
 });
+
+// Change the month when clicking prev/next buttons
+function changeMonth(direction) {
+    currentDate.setMonth(currentDate.getMonth() + direction);
+    updateCalendarView();
+}
+
+// Initialize the calendar on page load
+window.onload = () => {
+    updateCalendarView();
+};
