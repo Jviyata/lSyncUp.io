@@ -24,7 +24,7 @@ body {
     align-items: center;
     width: 100vw;
     height: 100vh;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #E0E7FF, #F3F4F6);
     color: var(--text-color);
     overflow: hidden;
