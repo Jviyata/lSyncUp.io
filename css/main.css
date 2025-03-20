@@ -89,6 +89,14 @@ header {
     background-color: var(--button-hover-color);
 }
 
+.month-title {
+    margin-top: 20px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+    color: var(--dark-gray);
+}
+
 .weekdays {
     margin-top: 20px;
     display: grid;
