@@ -50,6 +50,31 @@
                 </div>
                 <div id="calendar-grid" class="calendar-grid"></div>
             </div>
+            
+            <!-- Add missing week view container -->
+            <div id="week-view-container" class="calendar-view">
+                <div class="weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div id="week-grid" class="week-grid"></div>
+            </div>
+            
+            <!-- Add missing day view container -->
+            <div id="day-view-container" class="calendar-view">
+                <div class="day-header">
+                    <div>All Day</div>
+                    <div>Morning</div>
+                    <div>Afternoon</div>
+                    <div>Evening</div>
+                </div>
+                <div id="day-grid" class="day-grid"></div>
+            </div>
         </div>
         
         <div class="sidebar">
@@ -88,10 +113,95 @@
             </div>
         </div>
     </div>
-    <script>
-        document.getElementById('add-event-btn').addEventListener('click', () => {
-            alert('Add Event button clicked!');
-        });
-    </script>
+    
+    <!-- Event Modal -->
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Add Event</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="event-form">
+                    <div class="form-group">
+                        <label for="event-title">Title*</label>
+                        <input type="text" id="event-title" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="event-date">Date*</label>
+                            <input type="date" id="event-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-start">Start Time*</label>
+                            <input type="time" id="event-start" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-end">End Time*</label>
+                            <input type="time" id="event-end" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-category">Category*</label>
+                        <select id="event-category" required>
+                            <option value="selfcare">Self-Care</option>
+                            <option value="professional">Professional</option>
+                            <option value="social">Social</option>
+                            <option value="friends-family">Friends & Family</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="clubs-orgs">Clubs & Organizations</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-location">Location</label>
+                        <input type="text" id="event-location">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-description">Description</label>
+                        <textarea id="event-description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-reminder">Reminder</label>
+                        <select id="event-reminder">
+                            <option value="none">No reminder</option>
+                            <option value="15">15 minutes before</option>
+                            <option value="30">30 minutes before</option>
+                            <option value="60">1 hour before</option>
+                            <option value="1440">1 day before</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Invitees</label>
+                        <div id="friends-list" class="friends-list"></div>
+                        <button type="button" id="add-friend-btn" class="secondary-btn">Add Friend</button>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="delete-event-btn" class="delete-btn">Delete</button>
+                        <button type="submit" class="primary-btn">Save Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Friend Modal -->
+    <div id="friend-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Friend to Event</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="friend-select">Select Friend</label>
+                    <select id="friend-select"></select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="close-modal secondary-btn">Cancel</button>
+                    <button type="button" id="confirm-add-friend" class="primary-btn">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
