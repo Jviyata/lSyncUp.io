@@ -1,4 +1,4 @@
-::root {
+::root { 
     --primary-color: #3B82F6;
     --secondary-color: #34D399;
     --accent-color: #FBBF24;
@@ -66,6 +66,13 @@ header {
     overflow-y: auto;
 }
 
+.calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
 .category-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -77,7 +84,6 @@ header {
     margin: 8px;
     padding: 10px 20px;
     border: none;
-    background: linear-gradient(135deg, #ff6f61, #ffcc00, #4a90e2);
     color: white;
     border-radius: 12px;
     cursor: pointer;
@@ -86,13 +92,41 @@ header {
     font-weight: 600;
 }
 
+.category-buttons button:nth-child(1) {
+    background-color: var(--primary-color);
+}
+.category-buttons button:nth-child(2) {
+    background-color: var(--secondary-color);
+}
+.category-buttons button:nth-child(3) {
+    background-color: var(--accent-color);
+}
+.category-buttons button:nth-child(4) {
+    background-color: var(--danger-color);
+}
+.category-buttons button:nth-child(5) {
+    background-color: #A78BFA;
+}
+.category-buttons button:nth-child(6) {
+    background-color: #F472B6;
+}
+.category-buttons button:nth-child(7) {
+    background-color: #60A5FA;
+}
+
 .category-buttons button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    background-color: #333;
 }
 
-.month-title { margin-top: 20px; font-weight: 700; font-size: 1.5rem; text-align: right; color: var(--dark-gray); grid-column: 2 / 3; }
+.month-title {
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: right;
+    color: var(--dark-gray);
+    grid-column: 2 / 3;
+}
 
 .weekdays {
     margin-top: 10px;
