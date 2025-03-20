@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Calendar</title>
-    <!-- Adjust the CSS path to ensure it connects correctly -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/calendar.css">
     <link rel="stylesheet" href="css/modal.css">
@@ -15,6 +14,23 @@
     <script src="js/ui.js" defer></script>
 </head>
 <body>
+    <div class="popup-overlay" id="popup-overlay"></div>
+    <div id="add-event-popup">
+        <h2>Add New Event</h2>
+        <input type="text" placeholder="Event Title" id="event-title" required />
+        <input type="date" id="event-date" required />
+        <select id="event-category">
+            <option value="Self-Care">Self-Care</option>
+            <option value="Professional">Professional</option>
+            <option value="Social">Social</option>
+            <option value="Friends & Family">Friends & Family</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Clubs & Organizations">Clubs & Organizations</option>
+        </select>
+        <button onclick="saveEvent()">Save</button>
+        <button onclick="closePopup()">Cancel</button>
+    </div>
+
     <div class="app-container">
         <header>
             <h1>Social Calendar</h1>
@@ -27,7 +43,7 @@
             <button id="prev-btn">&lt;</button>
             <h2 id="current-date">March 2025</h2>
             <button id="next-btn">&gt;</button>
-            <button id="add-event-btn" class="primary-btn">+ Add Event</button>
+            <button id="add-event-btn" class="primary-btn" onclick="openPopup()">+ Add Event</button>
         </div>
         <div class="calendar-container">
             <div class="weekdays">
@@ -56,5 +72,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function openPopup() {
+            document.getElementById('add-event-popup').style.display = 'block';
+            document.getElementById('popup-overlay').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('add-event-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+        }
+
+        function saveEvent() {
+            closePopup();
+            alert('Event saved! (Add logic to save event here)');
+        }
+    </script>
 </body>
 </html>
