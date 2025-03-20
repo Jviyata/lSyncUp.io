@@ -18,6 +18,8 @@
 }
 
 body {
+    margin: 0;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,13 +34,13 @@ body {
     grid-template-columns: 3fr 1fr;
     grid-template-rows: auto auto 1fr;
     gap: 20px;
-    padding: 25px;
+    padding: 0;
     background-color: white;
     border-radius: 18px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 1200px;
-    height: 85vh;
+    width: 100%;
+    max-width: none;
+    height: 100vh;
     overflow: hidden;
 }
 
