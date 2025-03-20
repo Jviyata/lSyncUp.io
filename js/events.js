@@ -6,6 +6,14 @@ const Events = {
     },
     
     setupEventListeners: function() {
+        // Add event listener for the "Add Event" button
+        const addEventBtn = document.getElementById('add-event-btn');
+        if (addEventBtn) {
+            addEventBtn.addEventListener('click', () => {
+                this.openEventModal();
+            });
+        }
+        
         const eventForm = document.getElementById('event-form');
         if (eventForm) {
             eventForm.addEventListener('submit', (e) => {
@@ -54,7 +62,7 @@ const Events = {
         const form = document.getElementById('event-form');
         const friendsList = document.getElementById('friends-list');
         
-        if (!modalTitle || !deleteButton || !form) {
+        if (!modalTitle || !form) {
             console.error("Missing essential elements in openEventModal");
             return;
         }
@@ -74,7 +82,7 @@ const Events = {
             }
             
             modalTitle.textContent = 'Edit Event';
-            deleteButton.style.display = 'block';
+            if (deleteButton) deleteButton.style.display = 'block';
             
             this.populateEventForm(event);
             
@@ -84,7 +92,7 @@ const Events = {
         } else {
             console.log("Creating a new event");
             modalTitle.textContent = 'Add Event';
-            deleteButton.style.display = 'none';
+            if (deleteButton) deleteButton.style.display = 'none';
             
             this.setDefaultDateTime();
         }
@@ -165,25 +173,135 @@ const Events = {
     },
     
     saveEvent: function() {
-        // Implementation for saving event would go here
-        console.log("Saving event", this.currentEditingEventId);
+        const title = document.getElementById('event-title')?.value;
+        const date = document.getElementById('event-date')?.value;
+        const startTime = document.getElementById('event-start')?.value;
+        const endTime = document.getElementById('event-end')?.value;
+        const category = document.getElementById('event-category')?.value;
+        const description = document.getElementById('event-description')?.value;
+        const location = document.getElementById('event-location')?.value;
+        const reminder = document.getElementById('event-reminder')?.value;
+        
+        if (!title || !date || !startTime || !endTime || !category) {
+            alert('Please fill in all required fields');
+            return;
+        }
+        
+        const eventData = {
+            id: this.currentEditingEventId || Date.now().toString(),
+            title,
+            date,
+            startTime,
+            endTime,
+            category,
+            description,
+            location,
+            reminder,
+            invitees: this.getInviteesFromUI()
+        };
+        
+        if (this.currentEditingEventId) {
+            Storage.updateEvent(eventData);
+            console.log("Updated event:", eventData);
+        } else {
+            Storage.addEvent(eventData);
+            console.log("Added new event:", eventData);
+        }
+        
+        // Refresh the calendar or events list
+        if (typeof Calendar !== 'undefined' && Calendar.renderEvents) {
+            Calendar.renderEvents();
+        }
+        
         UI.closeModal('event-modal');
+    },
+    
+    getInviteesFromUI: function() {
+        const invitees = [];
+        const inviteeItems = document.querySelectorAll('#friends-list .invitee-item');
+        
+        inviteeItems.forEach(item => {
+            const removeBtn = item.querySelector('.remove-invitee');
+            if (removeBtn) {
+                invitees.push({
+                    id: removeBtn.dataset.id,
+                    name: item.querySelector('span').textContent
+                });
+            }
+        });
+        
+        return invitees;
     },
     
     deleteEvent: function() {
-        // Implementation for deleting event would go here
-        console.log("Deleting event", this.currentEditingEventId);
-        UI.closeModal('event-modal');
+        if (!this.currentEditingEventId) return;
+        
+        if (confirm('Are you sure you want to delete this event?')) {
+            Storage.deleteEvent(this.currentEditingEventId);
+            console.log("Deleted event:", this.currentEditingEventId);
+            
+            // Refresh the calendar or events list
+            if (typeof Calendar !== 'undefined' && Calendar.renderEvents) {
+                Calendar.renderEvents();
+            }
+            
+            UI.closeModal('event-modal');
+        }
     },
     
     addFriendToEvent: function() {
-        // Implementation for adding friend to event would go here
-        console.log("Adding friend to event");
+        const friendSelect = document.getElementById('friend-select');
+        const friendsList = document.getElementById('friends-list');
+        
+        if (!friendSelect || !friendsList) {
+            console.error("Missing friends elements");
+            return;
+        }
+        
+        const friendId = friendSelect.value;
+        if (!friendId) {
+            alert('Please select a friend');
+            return;
+        }
+        
+        const friendName = friendSelect.options[friendSelect.selectedIndex].text;
+        
+        // Check if friend is already added
+        const existingInvitee = document.querySelector(`.remove-invitee[data-id="${friendId}"]`);
+        if (existingInvitee) {
+            alert('This friend is already invited');
+            return;
+        }
+        
+        const inviteeElement = document.createElement('div');
+        inviteeElement.classList.add('invitee-item');
+        inviteeElement.innerHTML = `
+            <span>${friendName}</span>
+            <button type="button" class="remove-invitee" data-id="${friendId}">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        friendsList.appendChild(inviteeElement);
+        
+        // Add event listener to remove button
+        const removeBtn = inviteeElement.querySelector('.remove-invitee');
+        removeBtn.addEventListener('click', () => {
+            this.removeInvitee(friendId);
+        });
+        
         UI.closeModal('friend-modal');
     },
     
     removeInvitee: function(inviteeId) {
-        // Implementation for removing invitee would go here
-        console.log("Removing invitee", inviteeId);
+        const inviteeElement = document.querySelector(`.remove-invitee[data-id="${inviteeId}"]`).closest('.invitee-item');
+        if (inviteeElement) {
+            inviteeElement.remove();
+        }
     }
 };
+
+// Initialize the Events module when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    Events.init();
+});
