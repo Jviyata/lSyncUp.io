@@ -24,7 +24,7 @@ body {
     align-items: center;
     width: 100vw;
     height: 100vh;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #E0E7FF, #F3F4F6);
     color: var(--text-color);
     overflow: hidden;
@@ -32,7 +32,7 @@ body {
 
 .app-container {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 2fr;
     grid-template-rows: auto auto 1fr;
     gap: 20px;
     width: 100vw;
@@ -92,7 +92,7 @@ header {
     background-color: #333;
 }
 
-.month-title { margin-top: 20px; font-weight: 700; font-size: 1.5rem; text-align: left; color: var(--dark-gray); grid-column: 2 / 3; }
+.month-title { margin-top: 20px; font-weight: 700; font-size: 1.5rem; text-align: right; color: var(--dark-gray); grid-column: 2 / 3; }
 
 .weekdays {
     margin-top: 10px;
