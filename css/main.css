@@ -1,4 +1,4 @@
-/* Updated CSS for a Prominent Calendar Layout */
+/* Updated CSS for a Prominent Calendar Layout - March 2025 */
 :root { 
     --primary-color: #3B82F6;
     --secondary-color: #34D399;
@@ -10,6 +10,7 @@
     --dark-gray: #1F2937;
     --text-color: #111827;
     --button-hover-color: #2563EB;
+    --button-text-color: white;
 }
 
 * {
@@ -81,6 +82,9 @@ header {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--dark-gray);
 }
 
 .weekdays {
@@ -116,4 +120,6 @@ header {
 .calendar-day:hover {
     background-color: var(--light-gray);
     cursor: pointer;
+    color: var(--button-text-color);
+    font-weight: 600;
 }
