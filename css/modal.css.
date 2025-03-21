@@ -10,17 +10,18 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     overflow: auto;
+    backdrop-filter: blur(3px);
 }
 
 .modal-content {
     background-color: #fff;
-    margin: 10% auto;
+    margin: 8% auto;
     padding: 2rem;
-    border-radius: 8px;
-    width: 80%;
-    max-width: 600px;
+    border-radius: 12px;
+    width: 85%;
+    max-width: 550px;
     position: relative;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     animation: slide-down 0.3s ease-out;
 }
 
@@ -42,34 +43,42 @@
     font-size: 1.5rem;
     cursor: pointer;
     color: var(--dark-gray);
+    transition: color 0.2s ease;
 }
 
 .close-modal:hover {
-    color: var(--text-color);
+    color: var(--danger-color);
+    transform: scale(1.1);
 }
 
 .modal h2 {
     margin-bottom: 1.5rem;
     color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1.6rem;
 }
 
+/* Enhanced form styling */
 .form-group {
     margin-bottom: 1.5rem;
 }
 
 .form-row {
     display: flex;
-    gap: 1rem;
+    gap: 1.2rem;
+    margin-bottom: 1rem;
 }
 
 .form-row .form-group {
     flex: 1;
+    margin-bottom: 0;
 }
 
 label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
+    color: var(--dark-gray);
 }
 
 input[type="text"],
@@ -79,11 +88,32 @@ input[type="time"],
 select,
 textarea {
     width: 100%;
-    padding: 0.75rem;
+    padding: 0.8rem 1rem;
     border: 1px solid var(--mid-gray);
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 1rem;
     font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="date"]:hover,
+input[type="time"]:hover,
+select:hover,
+textarea:hover {
+    border-color: var(--dark-gray);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.2);
 }
 
 textarea {
@@ -91,36 +121,141 @@ textarea {
     min-height: 100px;
 }
 
+/* Enhanced form actions */
 .form-actions {
     display: flex;
     justify-content: space-between;
     margin-top: 2rem;
+    gap: 1rem;
 }
 
+.form-actions button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-save {
+    background-color: var(--primary-color);
+    color: white;
+    flex: 1;
+}
+
+.btn-save:hover {
+    background-color: var(--button-hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-cancel {
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+}
+
+.btn-cancel:hover {
+    background-color: var(--mid-gray);
+}
+
+.btn-delete {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #d33426;
+}
+
+/* Enhanced friends list */
 .friends-list {
     margin-bottom: 1rem;
     max-height: 150px;
     overflow-y: auto;
     border: 1px solid var(--mid-gray);
-    border-radius: 4px;
-    padding: 0.5rem;
+    border-radius: 8px;
+    padding: 0.75rem;
 }
 
 .friend-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem;
+    padding: 0.7rem;
     border-bottom: 1px solid var(--light-gray);
+    transition: background-color 0.2s ease;
 }
 
 .friend-item:last-child {
     border-bottom: none;
 }
 
+.friend-item:hover {
+    background-color: var(--light-gray);
+}
+
+.friend-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.friend-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--mid-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+.friend-name {
+    font-weight: 500;
+}
+
 .remove-friend {
     cursor: pointer;
     color: var(--danger-color);
+    padding: 0.3rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.remove-friend:hover {
+    background-color: rgba(234, 67, 53, 0.1);
+    transform: scale(1.1);
+}
+
+/* Category selection in form */
+.category-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.category-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.category-option:hover {
+    transform: translateY(-2px);
+}
+
+.category-option input[type="radio"] {
+    margin: 0;
 }
 
 /* Responsive for modals */
@@ -133,6 +268,34 @@ textarea {
     
     .form-row {
         flex-direction: column;
-        gap: 0;
+        gap: 1rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    h2 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .modal-content {
+        padding: 1.2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+        padding: 0.7rem;
+        font-size: 0.9rem;
     }
 }
