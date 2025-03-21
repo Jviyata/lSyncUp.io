@@ -1,70 +1,34 @@
-/* Updated CSS for a Prominent Calendar Layout - March 2025 */
-:root { 
-    --primary-color: #3B82F6;
-    --secondary-color: #34D399;
-    --accent-color: #FBBF24;
-    --danger-color: #EF4444;
-    --background-color: #F3F4F6;
-    --light-gray: #E5E7EB;
-    --mid-gray: #9CA3AF;
-    --dark-gray: #1F2937;
-    --text-color: #111827;
-    --button-hover-color: #2563EB;
-    --button-text-color: white;
-}
+$1
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
+.category-buttons {
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
     justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #E0E7FF, #F3F4F6);
-    color: var(--text-color);
-    overflow: hidden;
 }
 
-.app-container {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    grid-template-rows: auto 1fr;
-    gap: 20px;
-    width: 90vw;
-    height: 90vh;
-    padding: 20px;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-}
-
-header {
-    grid-column: 1 / 3;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 2rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+.category-buttons button {
+    background-color: var(--mid-gray);
     color: white;
+    border: none;
+    padding: 8px 16px;
     border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    font-weight: 700;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
-.sidebar {
-    grid-row: 2 / 3;
-    background: linear-gradient(135deg, #ff6f61, #4a90e2);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    overflow-y: auto;
+.category-buttons button:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+.category-buttons button:focus {
+    outline: none;
+    background-color: var(--accent-color);
+    color: var(--text-color);
 }
 
 .calendar-view {
@@ -122,4 +86,20 @@ header {
     cursor: pointer;
     color: var(--button-text-color);
     font-weight: 600;
+}
+
+.button, .arrow-button {
+    background-color: var(--primary-color);
+    color: var(--button-text-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.button:hover, .arrow-button:hover {
+    background-color: var(--button-hover-color);
 }
